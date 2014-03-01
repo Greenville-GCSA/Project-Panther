@@ -32,33 +32,85 @@
 		<style>
 		    body { background: rgb(255, 149, 27); }
 		    h1 { font-weight: bold; }
-		    /*#navigation { background: none repeat scroll 0% 0% rgba(255, 149, 27, 1.0); padding: 6px; border-top: 1px solid #8C510E; }*/
-		    /*#navigation ul li {
-    		    list-style: none;
-    		    border-bottom: 1px solid #8C510E;
-    		    padding: 4px 0 4px;
-                text-align: center;
-                font-weight: bold;
-                text-shadow: none;
-		    }
-		    #navigation ul li a:link, #navigation ul li a:visited {
-    		    color: #fff;
-    		    text-decoration: none;
-		    }
-		    #navigation ul li a:hover {
-    		    text-decoration: none;
-		    }*/
+			.ui-panel-display-reveal { box-shadow: none !important; }
+			#user-avatar {
+				float: left;
+				width: 50px;
+				margin-right: 6px;
+			}
+			#user-avatar > img {
+				max-width: 50px;
+				max-height: 50px;
+			}
+			#user-name {
+				font-size: medium;
+				text-transform: none;
+				margin-top: 15px;
+			}
+			.floatleft { float: left; }
+			.floatright { float: right; }
+			br.clear { clear: both; }
+			ul.ui-listview { text-transform: none; }
+			.sidebar-icon {
+				float: left;
+				width: 16px;
+				margin-right: 8px;
+			}
 		  </style>
 	</head>
 	<body>
 		<div data-role="page" id="page-home" style="margin-top: 21px;">
 			<div data-role="panel" data-animate="true" data-swipe-close="true" data-dismissible="true" id="navigation">
 				<ul data-role="listview" data-theme="d" data-icon="false">
-                    <li data-role="list-divider">Navigation</li>
-				    <li><a href="#">PantherPoints</a></li>
-                    <li><a href="#">GPA Calculator</a></li>
-                    <li><a href="#">Chapel Credit Counter</a></li>
-                    <li><a href="#">Building Hours</a></li>
+                    <li data-role="list-divider" id="inline-profile">
+						<div id="user-avatar">
+							<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" />
+						</div>
+						<div id="user-name">
+							Matthew P. Kerle
+						</div>
+						<br class="clear" />
+                    </li>
+				    <li>
+						<a href="#">
+							<span class="floatleft nav-text">
+								<img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints
+							</span>
+							<span class="ui-icon-carat-r ui-btn-icon-right"></span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="floatleft nav-text">
+								<img src="images/sidebar-icons/icon-calculatoralt.png" alt="" class="sidebar-icon" />GPA Calculator
+							</span>
+							<span class="ui-icon-carat-r ui-btn-icon-right"></span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="floatleft nav-text">
+								<img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter
+							</span>
+							<span class="ui-icon-carat-r ui-btn-icon-right"></span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="floatleft nav-text">
+								<img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours
+							</span>
+							<span class="ui-icon-carat-r ui-btn-icon-right"></span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="floatleft nav-text">
+								<img src="images/sidebar-icons/icon-lifepreserver.png" alt="" class="sidebar-icon"/>Call Security
+							</span>
+							<span class="ui-icon-carat-r ui-btn-icon-right"></span>
+						</a>
+					</li>
 				</ul>
 				<!-- panel content goes here -->
 			</div><!-- /panel -->
