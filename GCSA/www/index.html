@@ -18,116 +18,173 @@
     under the License.
 -->
 <html>
+
 	<head>
+
 		<title>GCSA</title>
+
 		<meta charset="utf-8" />
 		<meta name="format-detection" content="telephone=no" />
+
 		<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
 		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
 		<link href="css/index.css" rel="stylesheet" type="text/css" />
 		<link href="css/jquery.mobile-1.4.1.min.css" rel="stylesheet" />
 		<link href="css/ProjectPanther2.0.min.css" rel="stylesheet" />
+
 		<script src="javascript/jquery-2.1.0.min.js"></script>
 		<script src="javascript/jquery.mobile-1.4.1.min.js"></script>
+
+		<!-- The Loading Prototype -->
+		<script>
+
+			$(document).bind('mobileinit', function() {
+				$.mobile.loader.prototype.options.text = "Loading";
+				$.mobile.loader.prototype.options.textVisible = false;
+				$.mobile.loader.prototype.options.theme = "a";
+				$.mobile.loader.prototype.options.html = "";
+			});
+
+		</script>
+
 		<style>
+
+			/* Page Elements */
 			body { background: rgb(255, 149, 27); }
 		    h1 { font-weight: bold; }
+
+			/* Navigation Stuff */
+			ul.ui-listview { text-transform: none; }
 			.ui-panel-display-reveal { box-shadow: none !important; }
-			#inline-profile {
-                background: #ff951b;
-                color: #fff;
-                text-shadow: 1px 1px 1px #444;
-                border-top: 1px solid #8c510e;
-                max-height: 55px;
-			}
-			#user-avatar {
-				float: left;
-				width: 50px;
-				margin-right: 6px;
-			}
-			#user-avatar > img {
-				max-width: 50px;
-				max-height: 50px;
-			}
-			#user-name {
-				font-size: medium;
-				text-transform: none;
-				margin-top: 5px;
-			}
+			.sidebar-icon { float: left; width: 16px; margin: 2px 8px; }
+
+			/* Mini Profiles on Navigation */
+			#inline-profile { background: #ff951b; color: #fff; text-shadow: 1px 1px 1px #444; border-top: 1px solid #8c510e; max-height: 55px; padding-top: 20px; }
+			#user-avatar { float: left; width: 50px; margin-right: 6px; }
+			#user-avatar > img { max-width: 50px; max-height: 50px; }
+			#user-name { font-size: medium; text-transform: none; margin-top: 5px; }
+
+            .header-no-border { border-top: none !important; }
+            .top-filler { background: #ff951b; }
+
+			/* Various Useful Classes */
 			.floatleft { float: left; }
 			.floatright { float: right; }
-			br.clear { clear: both; }
-			ul.ui-listview { text-transform: none; }
-			.sidebar-icon {
-				float: left;
-				width: 16px;
-				margin: 2px 8px;
-			}
+			.clear { clear: both; }
+
 		</style>
-		<script type="text/javascript">
-			var page = $("body").pagecontainer('getActivePage')[0].id;
-			alert(page);
-			var nav = '<div data-role="panel" id="navigation"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" /></div><div id="user-name"><span class="student-name">Matthew P. Kerle</span><br /><span class="student-id">201202055</span></div><br class="clear" /></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />Dashboard</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />Events</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#page-building_hours"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="#">        <span class="floatleft nav-text">            <img src="images/sidebar-icons/icon-user.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li><a href="tel:16186647777"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
-			jQuery('*[data-role="page"]').on("pagebeforecreate", function(e) {
-				$("#page-dashboard").prepend(nav);
+
+		<script>
+
+			$(document).on("pageinit", "body", function() {
+
 			});
-			jQuery(document).ready(function() {
-				$("#page-dashboard").prepend(nav);
-			});
+
 		</script>
+
+		<script>
+			var nav;
+			nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" /></div><div id="user-name"><span class="student-name">Matthew P. Kerle</span><br /><span class="student-id">201202055</span></div><br class="clear" /></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building-hours"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-at.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#">        <span class="floatleft nav-text">            <img src="images/sidebar-icons/icon-user.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+        </script>
+
 	</head>
+
 	<body>
-		<div data-role="page" id="page-dashboard" style="padding-top: 21px;">
 
-			<div data-role="header" id="dashboard-header">
-				<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
-				<h1>Dashboard</h1>
+		<div id="pages-container">
+
+			<div data-role="page" id="events" class="dynamic-page">
+
+                <div class="top-filler">&nbsp;</div>
+
+				<!-- Header -->
+				<div data-role="header" id="events-header" class="header-no-border">
+					<a href="#" class="nav-trigger" id="events-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<h1>Events</h1>
+				</div>
+
+				<!-- Page Content -->
+				<div data-role="main" id="dashboard-content" class="ui-content">
+					<p>Events Page Content</p>
+				</div>
+
+				<!-- Footer -->
+				<div data-role="footer" id="dashboard-footer">
+					<p>Events Footer</p>
+				</div>
+
 			</div>
 
-			<div data-role="main" id="dashboard-content" class="ui-content">
-				<p>Dashboard Page Content</p>
-			</div>
+			<div data-role="page" id="building-hours" class="dynamic-page" style="padding-top: 21px;">
 
-			<div data-role="footer" id="dashboard-footer">
-				<p>Dashboard Footer</p>
+				<div data-role="header" id="building_hours-header">
+					<a href="#nav" class="nav-trigger" id="building-hours-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<h1>Building Hours</h1>
+				</div>
+
+				<div data-role="main" id="building_hours-content" class="ui-content">
+					<p>Building Hours Content</p>
+				</div>
+
+				<div data-role="footer">
+					<p>Building Hours Footer</p>
+				</div>
+
 			</div>
 
 		</div>
 
-		<div data-role="page" id="page-building_hours" style="padding-top: 21px;">
-
-			<div data-role="header" id="building_hours-header">
-				<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
-				<h1>Building Hours</h1>
-			</div>
-
-			<div data-role="main" id="building_hours-content" class="ui-content">
-				<p>Building Hours Content</p>
-			</div>
-
-			<div data-role="footer">
-				<p>Building Hours Footer</p>
-			</div>
-
-		</div>
 
 		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="javascript/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
 		</script>
+
 		<script type="text/javascript">
-			$(function () {
-				$("[data-role=panel]").panel().enhanceWithin();
-			});
+
 			$(document).on("pageinit", "body", function() {
-				$(document).on("swiperight click", "#page-dashboard", function(e) {
-                    $("#navigation").panel("open");
+
+				$(document).on("swiperight click", ".nav-trigger", function(e) {
+
+					var pageLoadID, pageNavID, pageNav;
+
+					e.preventDefault();
+
+					//-- If this is a navigation panel, we need to inject it into our current page.
+					if ($(this).hasClass("nav-trigger")) {
+
+						pageLoadID  = $(this).attr("id");
+						pageLoadID  = pageLoadID.replace("-nav-trigger", "");
+						pageNavID   = pageLoadID + "-navigation";
+						pageNav     = nav.replace("\<js::replace{nav_id}/>", pageNavID);
+
+						$("#" + pageLoadID).prepend(pageNav);
+						$("#" + pageNavID).panel().enhanceWithin().panel("open");
+
+					}
+
 				});
-				$(document).on("swiperight click", "#page-building_hours", function(e) {
-					$("#navigation").panel("open");
+
+				$(document).on("click", "li.nav-item a", function(e) {
+
+					var linkID;
+
+					e.preventDefault();
+
+					linkID = $(this).attr("href");
+					linkID = linkID.replace("#", "");
+
+					alert(linkID);
+
+					$("#pages-container .dynamic-page").hide();
+					$("#" + linkID).show();
+
 				});
+
 			});
 		</script>
+
 	</body>
 </html>
