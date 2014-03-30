@@ -17,7 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<html>
+<html xmlns:fb="http://ogp.me/ns/fb#">
 
 	<head>
 
@@ -27,7 +27,7 @@
 		<meta name="format-detection" content="telephone=no" />
 
 		<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, target-densitydpi=device-dpi" />
 
 		<link href="css/index.css" rel="stylesheet" type="text/css" />
 		<link href="css/jquery.mobile-1.4.1.min.css" rel="stylesheet" />
@@ -35,18 +35,6 @@
 
 		<script src="javascript/jquery-2.1.0.min.js"></script>
 		<script src="javascript/jquery.mobile-1.4.1.min.js"></script>
-
-		<!-- The Loading Prototype -->
-		<script>
-
-			$(document).bind('mobileinit', function() {
-				$.mobile.loader.prototype.options.text = "Loading";
-				$.mobile.loader.prototype.options.textVisible = false;
-				$.mobile.loader.prototype.options.theme = "a";
-				$.mobile.loader.prototype.options.html = "";
-			});
-
-		</script>
 
 		<style>
 
@@ -65,61 +53,249 @@
 			#user-avatar > img { max-width: 50px; max-height: 50px; }
 			#user-name { font-size: medium; text-transform: none; margin-top: 5px; }
 
+            #login_button { display: block; background: url('images/core/facebook-login-button.png') no-repeat; background-size: 75%; margin-left: auto; margin-right: auto; cursor: pointer; width: 360px; height: 172.5px; }
+            #confirmGCStudent-popup { width: 90% !important; left: 5% !important; }
+            .confirmation_form { display: none; }
+            #student_id, #confirmation_code { text-align: center; }
+
             .header-no-border { border-top: none !important; }
-            .top-filler { background: #ff951b; }
+            .top-filler { background: #ff951b; height: 22px; }
 
 			/* Various Useful Classes */
 			.floatleft { float: left; }
 			.floatright { float: right; }
 			.clear { clear: both; }
+			.hidden { display: none; }
+
+            /* Dev Stuff */
+            #data { text-transform: none !important; }
 
 		</style>
+
+		<!-- The Loading Prototype -->
+		<script>
+
+            //-- IO Buffer for every dynamic page...
+            $(document).bind('mobileinit', function() {
+                $(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+            });
+            /* This is solely for testing in-browser */
+            $(document).ready(function() {
+                $(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+            });
+
+		</script>
 
 		<script>
 
 			$(document).on("pageinit", "body", function() {
-
+			
 			});
 
 		</script>
 
 		<script>
+
 			var nav;
-			nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" /></div><div id="user-name"><span class="student-name">Matthew P. Kerle</span><br /><span class="student-id">201202055</span></div><br class="clear" /></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building-hours"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-at.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#">        <span class="floatleft nav-text">            <img src="images/sidebar-icons/icon-user.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+			nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"></div><div id="user-name"><span class="student-name"></span><br /><span class="student-id"></span></div><br class="clear" /></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building-hours"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-hashtag.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#">        <span class="floatleft nav-text">            <img src="images/sidebar-icons/icon-at.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+
+            function renderNav(value, index, arr) {
+                alert(value);
+                var newNav = nav.replace("\<js::replace{nav_id}/>", value + "-navigation");
+                $("#" + value).prepend(newNav);
+            }
+
+            var pages;
+            pages = ["panther_points", "building_hours"];
+            pages.forEach(renderNav);
+
         </script>
 
 	</head>
 
 	<body>
 
+        <div id="fb-root"></div>
+
+        <!-- cordova -->
+        <script src="cordova.js"></script>
+        <!-- cordova facebook plugin -->
+        <script src="javascript/fbc/cdv-plugin-fb-connect.js"></script>
+        <!-- facebook js sdk -->
+        <script src="javascript/fbc/facebook-js-sdk.js"></script>
+
+        <script>
+    
+            // Specify the user fields to query the OpenGraph for.
+            // Some values are dependent on the user granting certain permissions
+            var fields = [
+                'id',
+                'name',
+                'first_name',
+                'last_name',
+                'link',
+                'username',
+                'gender',
+                'locale',
+                'age_range'
+            ].join(',');
+
+            <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
+            if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined'))
+                alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+            if (typeof CDV == 'undefined')
+                alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+            if (typeof FB == 'undefined')
+                alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+
+            var facebookAccessToken = '';
+
+            FB.Event.subscribe('auth.login', function(response) {
+                facebookAccessToken = response.authResponse.accessToken;
+            });
+            
+            FB.Event.subscribe('auth.logout', function(response) {
+                //alert('auth.logout event');
+            });
+            
+            FB.Event.subscribe('auth.sessionChange', function(response) {
+                //alert('auth.sessionChange event');
+            });
+            
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                //alert('auth.statusChange event');
+            });
+
+            function facebook_user_profile(accessToken, callbackFunc) {
+                FB.api('/me', {fields: fields, access_token: accessToken}, function(response) {
+                    if (response.error) {
+                        alert("False");
+                    } else {
+                        callbackFunc(response);
+                    }
+                });
+            }
+            
+            function logout() {
+                FB.logout(function(response) {
+                    alert("Logged Out of Facebook!");
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                });
+            }
+
+            function login() {
+                FB.login(function(response) {
+                    if (response.status == "connected") {
+                        // Whatever: response.authResponse.accessToken;
+                    } else {
+                        return false;
+                    }
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                }, { scope: 'basic_info'});
+            }
+            
+            document.addEventListener('deviceready', function() {
+                try {
+                    FB.init({
+                        appId: '292844627531305',
+                        nativeInterface: CDV.FB,
+                        useCachedDialogs: false,
+                        status     : true,
+                        cookie     : true,
+                        xfbml      : false
+                    });
+                    document.getElementById('data').innerHTML = "";
+                } catch (e) {
+                    alert(e);
+                }
+            }, false);
+        </script>
+
 		<div id="pages-container">
 
-			<div data-role="page" id="events" class="dynamic-page">
-
-                <div class="top-filler">&nbsp;</div>
+            <!-- Login / Register -->
+            <div data-role="page" id="login_register" class="dynamic-page">
 
 				<!-- Header -->
-				<div data-role="header" id="events-header" class="header-no-border">
-					<a href="#" class="nav-trigger" id="events-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
-					<h1>Events</h1>
+				<div data-role="header" id="login_register-header" class="header-no-border">
+					<h1>Login</h1>
 				</div>
 
 				<!-- Page Content -->
-				<div data-role="main" id="dashboard-content" class="ui-content">
-					<p>Events Page Content</p>
+				<div data-role="main" id="login_register-content" class="ui-content">
+				    <a href="#" id="login_button"></a>
+				    <a href="#" id="logout_button" style="display: none;">Logout</a>
+				    <!-- data-dismissible="false" -->
+				    <div data-role="popup" id="confirmGCStudent" style="text-align: center; width: 90% !important; left: 5% !important;">
+				        <div style="margin-left: auto; margin-right: auto;">
+                            <div data-role="header">
+                                <h4>GC Profile</h4>
+                            </div>
+                            <div data-role="main" class="ui-content">
+                                <span id="step_one">
+                                    <h4 style="text-align: center;">Who are you?</h4>
+                                    <input type="radio" name="member_type" id="type_student" value="1" /> <label for="type_student">Student</label>
+                                    <input type="radio" name="member_type" id="type_faculty-staff" value="2" /> <label for="type_faculty-staff">Faculty  / Staff</label>
+                                </span>
+                                <span id="step_two">
+                                    <p class="student_login_element hidden" style="text-transform: none; text-align: center;">Enter your Student ID below to confirm your identity.</p>
+                                    <div id="student_login" class="confirmation_form">
+                                        <label for="student_id"><strong>Student ID:</strong></label> <input type="tel" id="student_id" />
+                                    </div>
+                                    <div id="faculty_staff_login" class="confirmation_form">
+                                        <label for="faculty_staff_first_name"><strong>First Name:</strong></label> <input type="text" id="faculty_staff_first_name" />
+                                        <label for="faculty_staff_last_name"><strong>Last Name:</strong></label> <input type="text" id="faculty_staff_last_name" />
+                                    </div>
+                                    <span id="confirm_form_lower" class="hidden">
+                                        <input type="submit" value="Submit" id="send_confirmation" />
+                                    </span>
+                                </span>
+                                <span id="step_three" class="hidden">
+                                    <p style="text-transform: none; text-align: center;">A confirmation email was sent to <span id="email_slot"></span>.<br />Enter the confirmation code below and complete your registration.</p>
+                                    <label for="confirmation_code"><strong>Confirmation Code:</strong> <input type="tel" id="confirmation_code" />
+                                    <input type="submit" value="Complete Registration" id="complete_registration_button" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="data">loading ...</div>
+                    <div id="dev_console"></div>
+                    <div id="log"></div>
 				</div>
 
 				<!-- Footer -->
-				<div data-role="footer" id="dashboard-footer">
+				<div data-role="footer" id="login_register-footer">
 					<p>Events Footer</p>
+				</div>
+
+            </div>
+
+            <!-- PantherPoints -->
+			<div data-role="page" id="panther_points" class="dynamic-page">
+
+				<!-- Header -->
+				<div data-role="header" id="panther_points-header" class="header-no-border">
+					<a href="#" class="nav-trigger" id="panther_points-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<h1>PantherPoints</h1>
+				</div>
+
+				<!-- Page Content -->
+				<div data-role="main" id="panther_points-content" class="ui-content">
+					<p>PantherPoints Page Content</p>
+				</div>
+
+				<!-- Footer -->
+				<div data-role="footer" id="panther_points-footer">
+					<p>PantherPoints Footer</p>
 				</div>
 
 			</div>
 
-			<div data-role="page" id="building-hours" class="dynamic-page" style="padding-top: 21px;">
+            <!-- Building Hours -->
+			<div data-role="page" id="building_hours" class="dynamic-page">
 
 				<div data-role="header" id="building_hours-header">
-					<a href="#nav" class="nav-trigger" id="building-hours-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<a href="#nav" class="nav-trigger" id="building_hours-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
 					<h1>Building Hours</h1>
 				</div>
 
@@ -127,7 +303,7 @@
 					<p>Building Hours Content</p>
 				</div>
 
-				<div data-role="footer">
+				<div data-role="footer" id="building_hours-footer">
 					<p>Building Hours Footer</p>
 				</div>
 
@@ -135,55 +311,157 @@
 
 		</div>
 
-
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="javascript/index.js"></script>
-		<script type="text/javascript">
-			app.initialize();
-		</script>
-
-		<script type="text/javascript">
+        <script>
 
 			$(document).on("pageinit", "body", function() {
 
-				$(document).on("swiperight click", ".nav-trigger", function(e) {
+                $("input[name=member_type]").change(function(event) {
+                    var selectedValue = $(this).val();
+                    if (selectedValue == 1) {
+                        $(".confirmation_form").slideUp("slow");
+                        $("#student_login").slideDown("slow");
+                        $(".student_login_element").show();
+                        $("#confirm_form_lower").show();
+                    } else if (selectedValue == 2) {
+                        $(".confirmation_form").slideUp("slow");
+                        $(".student_login_element").hide();
+                        $("#faculty_staff_login").slideDown("slow");
+                        $("#confirm_form_lower").show();
+                    }
+                });
 
-					var pageLoadID, pageNavID, pageNav;
+                $("#send_confirmation").on("click", function(event) {
+                    $.ajax({
+                        url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/SendConfirmationEmail.php',
+                        type: 'post',
+                        data: {
+                            'member_type': $("input[name=member_type]").val(),
+                            'student_id': $("#student_id").val(),
+                            'faculty_staff_first_name': $("#faculty_staff_first_name").val(),
+                            'faculty_staff_last_name': $("#faculty_staff_last_name").val()
+                        },
+                        dataType: 'json',
+                        error: function(xhr) {
+							alert(xhr.responseText);
+						},
+                        success: function(response) {
+                           if (response.status == 'email_sent') {
+                                var sentEmailAddress = '';
+                                if ($("input[name=member_type]").val() == 1) {
+                                    sentEmailAddress = $("#student_id").val() + "@panthers.greenville.edu";
+                                } else {
+                                    var tmpFirst, tmpLast;
+                                    tmpFirst = $("#faculty_staff_first_name").val();
+                                    tmpLast = $("#faculty_staff_last_name").val();
+                                    tmpFirst = tmpFirst.toLowerCase();
+                                    tmpLast = tmpLast.toLowerCase();
+                                    sentEmailAddress = tmpFirst + "." + tmpLast + "@greenville.edu";
+                               }
+                               $("#email_slot").html(sentEmailAddress);
+                               $("#step_one, #step_two").slideUp("slow");
+                               $("#step_three").slideDown("slow");
+                           }
+                        }
+                    });
+                });
 
-					e.preventDefault();
+                $("#login_button").on("click", function(event) {
+                    login();
+                    facebook_user_profile(facebookAccessToken, function(user) {
+                        if (facebookAccessToken != null) {
+                            //-- See if the Facebook User has already started a GCSA account...
+                            $.ajax({
+                                url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserCheckExists.php',
+                                type: 'post',
+                                data: {
+                                    'facebook_user_id': user.id
+                                },
+                                dataType: 'json',
+                                error: function(xhr) {
+                                    alert(xhr.responseText);
+                                },
+                                success: function(response, user) {
+                                    if (response.is_existing === true) {
+                                        $("#user-avatar").html("<img src=\"https://graph.facebook.com/" + user.id + "/picture\" alt=\"\" id=\"avatar\" />");
+                                        $("#student-name").html(user.first_name + " " + user.last_name);
+                                        $.mobile.changePage("#panther_points");
+                                    } else {
+                                        $(this).hide();
+                                        $("#confirmGCStudent").popup("open");
+                                        $("#logout_button").show();
+                                        $.ajax({
+                                            url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserAdd.php',
+                                            type: 'post',
+                                            data: {
+                                                'new_user': true,
+                                                'facebook_user_id': facebookUserProfile.id,
+                                                'facebook_access_token': facebookAccessToken,
+                                                'member_type': $("input[name=member_type]").val(),
+                                                'student_id': $("#student_id").val(),
+                                                'faculty_staff_first_name': $("#faculty_staff_first_name").val(),
+                                                'faculty_staff_last_name': $("#faculty_staff_last_name").val()
+                                            },
+                                            dataType: 'json',
+                                            error: function(xhr) {
+                    							alert(xhr.responseText);
+                    						},
+                                            success: function(response) {
+                                               if (response.status == 'email_sent') {
+                                                    var sentEmailAddress = '';
+                                                    if ($("input[name=member_type]").val() == 1) {
+                                                        sentEmailAddress = $("#student_id").val() + "@panthers.greenville.edu";
+                                                    } else {
+                                                        var tmpFirst, tmpLast;
+                                                        tmpFirst = $("#faculty_staff_first_name").val();
+                                                        tmpLast = $("#faculty_staff_last_name").val();
+                                                        tmpFirst = tmpFirst.toLowerCase();
+                                                        tmpLast = tmpLast.toLowerCase();
+                                                        sentEmailAddress = tmpFirst + "." + tmpLast + "@greenville.edu";
+                                                   }
+                                                   $("#email_slot").html(sentEmailAddress);
+                                                   $("#step_one, #step_two").slideUp("slow");
+                                                   $("#step_three").slideDown("slow");
+                                               }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            alert("Failed to login, try again!");
+                        }
+                    });
+                });
 
-					//-- If this is a navigation panel, we need to inject it into our current page.
-					if ($(this).hasClass("nav-trigger")) {
+                $("#logout_button").on("click", function(event) {
+                    logout();
+                    $(this).hide();
+                    $("#login_button").show();
+                });
 
-						pageLoadID  = $(this).attr("id");
-						pageLoadID  = pageLoadID.replace("-nav-trigger", "");
-						pageNavID   = pageLoadID + "-navigation";
-						pageNav     = nav.replace("\<js::replace{nav_id}/>", pageNavID);
+            });
 
-						$("#" + pageLoadID).prepend(pageNav);
-						$("#" + pageNavID).panel().enhanceWithin().panel("open");
+            $(document).on("swiperight click", ".nav-trigger", function(e) {
 
-					}
+				var pageLoadID, pageNavID, pageNav;
 
-				});
+				e.preventDefault();
 
-				$(document).on("click", "li.nav-item a", function(e) {
+				//-- If this is a navigation panel, we need to inject it into our current page.
+				if ($(this).hasClass("nav-trigger")) {
 
-					var linkID;
+                    pageLoadID  = $(this).attr("id");
+    				pageLoadID  = pageLoadID.replace("-nav-trigger", "");
+    				pageNavID   = pageLoadID + "-navigation";
+                    //pageNav     = nav.replace("\<js::replace{nav_id}/>", pageNavID);
+    
+    				//$("#" + pageLoadID).prepend(pageNav);
+    				$("#" + pageNavID).panel().enhanceWithin().panel("open");
 
-					e.preventDefault();
+                }
 
-					linkID = $(this).attr("href");
-					linkID = linkID.replace("#", "");
+            });
 
-					alert(linkID);
-
-					$("#pages-container .dynamic-page").hide();
-					$("#" + linkID).show();
-
-				});
-
-			});
 		</script>
 
 	</body>

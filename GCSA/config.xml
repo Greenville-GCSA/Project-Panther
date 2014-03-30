@@ -1,12 +1,44 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.GCSA" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.example.GCSA" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+
     <name>GCSA</name>
+
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
+
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
     </author>
+
+    <!-- Main Source File -->
     <content src="index.html" />
+
+    <!-- Whitelisted Domains (* = Global|All) -->
     <access origin="*" />
+
+    <!-- Preferences:
+        - Show / Hide the Status Bar (true|false)
+        - Allowed Orientations (default|landscape|portrait)
+          [default = landscape & portrait]
+    -->
+    <preference name="Fullscreen" value="false" />
+    <preference name="Orientation" value="landscape" />
+
+
+    <!-- Plugins:
+        - Facebook Connect: params(APP_ID, APP_NAME)
+    -->
+    <gap:plugin name="org.phonegap.facebookconnect">
+        <param name="APP_ID" value="292844627531305" />
+        <param name="APP_NAME" value="GCSA" />
+    </gap:plugin>
+
+    <!-- Features:
+        - NetworkStatus (iOS): params(ios-package)
+    -->
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
+
 </widget>

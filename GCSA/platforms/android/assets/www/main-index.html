@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+	<head>
+
+		<title>GCSA</title>
+
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+		<link href="css/index.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery.mobile-1.4.1.min.css" rel="stylesheet" />
+		<link href="css/ProjectPanther2.0.min.css" rel="stylesheet" />
+
+		<script src="javascript/jquery-2.1.0.min.js"></script>
+		<script src="javascript/jquery.mobile-1.4.1.min.js"></script>
+
+		<!-- The Loading Prototype -->
+		<script>
+
+            //-- IO Buffer for every dynamic page...
+            $(document).bind('mobileinit', function() {
+                $(".dynamic-page").append("<div class=\"top-filler\">&nbsp;</div>");
+            });
+
+			$(document).bind('mobileinit', function() {
+				$.mobile.loader.prototype.options.text = "Loading";
+				$.mobile.loader.prototype.options.textVisible = false;
+				$.mobile.loader.prototype.options.theme = "a";
+				$.mobile.loader.prototype.options.html = "";
+			});
+
+		</script>
+
+		<style>
+
+			/* Page Elements */
+			body { background: rgb(255, 149, 27); }
+		    h1 { font-weight: bold; }
+
+			/* Navigation Stuff */
+			ul.ui-listview { text-transform: none; }
+			.ui-panel-display-reveal { box-shadow: none !important; }
+			.sidebar-icon { float: left; width: 16px; margin: 2px 8px; }
+
+			/* Mini Profiles on Navigation */
+			#inline-profile { background: #ff951b; color: #fff; text-shadow: 1px 1px 1px #444; border-top: 1px solid #8c510e; max-height: 55px; padding-top: 20px; }
+			#user-avatar { float: left; width: 50px; margin-right: 6px; }
+			#user-avatar > img { max-width: 50px; max-height: 50px; }
+			#user-name { font-size: medium; text-transform: none; margin-top: 5px; }
+
+            .header-no-border { border-top: none !important; }
+            .top-filler { background: #ff951b; }
+
+			/* Various Useful Classes */
+			.floatleft { float: left; }
+			.floatright { float: right; }
+			.clear { clear: both; }
+
+		</style>
+
+		<script>
+
+			$(document).on("pageinit", "body", function() {
+
+			});
+
+		</script>
+
+		<script>
+			var nav;
+			nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" /></div><div id="user-name"><span class="student-name">Matthew P. Kerle</span><br /><span class="student-id">201202055</span></div><br class="clear" /></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building-hours"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-at.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#">        <span class="floatleft nav-text">            <img src="images/sidebar-icons/icon-user.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+        </script>
+
+	</head>
+
+	<body>
+
+        <div id="fb-root"></div>
+
+		<div id="pages-container">
+
+            <!-- Login / Register -->
+            <div data-role="page" id="login_register" class="dynamic-page">
+
+				<!-- Header -->
+				<div data-role="header" id="login_register-header" class="header-no-border">
+					<h1>Login / Register</h1>
+				</div>
+
+				<!-- Page Content -->
+				<div data-role="main" id="login_register-content" class="ui-content">
+                    <button onclick="login()">Login</button>
+                    <button onclick="me()">Me</button>
+                    <button onclick="getLoginStatus()">Get login</button>
+                    <button onclick="logout()">Logout</button>
+                    <button onclick="facebookWallPost()">facebookWallPost</button>
+                    <button onclick="publishStoryFriend()">friendstory</button>
+                    
+                    <div id="data">loading ...</div>
+                    <div id="dev_console"></div>
+                    <div id="log"></div>
+				</div>
+
+				<!-- Footer -->
+				<div data-role="footer" id="login_register-footer">
+					<p>Events Footer</p>
+				</div>
+
+            </div>
+
+            <!-- PantherPoints -->
+			<div data-role="page" id="pantherpoints" class="dynamic-page">
+
+				<!-- Header -->
+				<div data-role="header" id="pantherpoints-header" class="header-no-border">
+					<a href="#" class="nav-trigger" id="pantherpoints-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<h1>PantherPoints</h1>
+				</div>
+
+				<!-- Page Content -->
+				<div data-role="main" id="pantherpoints-content" class="ui-content">
+					<p>PantherPoints Page Content</p>
+				</div>
+
+				<!-- Footer -->
+				<div data-role="footer" id="pantherpoints-footer">
+					<p>PantherPoints Footer</p>
+				</div>
+
+			</div>
+
+            <!-- Building Hours -->
+			<div data-role="page" id="building_hours" class="dynamic-page">
+
+				<div data-role="header" id="building_hours-header">
+					<a href="#nav" class="nav-trigger" id="building_hours-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+					<h1>Building Hours</h1>
+				</div>
+
+				<div data-role="main" id="building_hours-content" class="ui-content">
+					<p>Building Hours Content</p>
+				</div>
+
+				<div data-role="footer" id="building_hours-footer">
+					<p>Building Hours Footer</p>
+				</div>
+
+			</div>
+
+		</div>
+
+        <!-- cordova -->
+        <script src="cordova.js"></script>
+		<script type="text/javascript" src="javascript/index.js"></script>
+		<script type="text/javascript">
+			app.initialize();
+		</script>
+
+        <!-- cordova facebook plugin -->
+        <script src="javascript/fbc/cdv-plugin-fb-connect.js"></script>
+        <!-- facebook js sdk -->
+        <script src="javascript/fbc/facebook-js-sdk.js"></script>
+
+        <script>
+
+            //-- Some variable definitions.
+            var friendIDs = [], fdata;
+
+            <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
+            if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined'))
+                alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+            if (typeof CDV == 'undefined')
+                alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+            if (typeof FB == 'undefined')
+                alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+            
+            FB.Event.subscribe('auth.login', function(response) {
+                alert('auth.login event');
+            });
+            
+            FB.Event.subscribe('auth.logout', function(response) {
+                alert('auth.logout event');
+            });
+            
+            FB.Event.subscribe('auth.sessionChange', function(response) {
+                alert('auth.sessionChange event');
+            });
+            
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                alert('auth.statusChange event');
+            });
+
+            function getLoginStatus() {
+                FB.getLoginStatus(function(response) {
+                    if (response.status == 'connected') {
+                        alert('logged in');
+                    } else {
+                        alert('not logged in');
+                    }
+                });
+            }
+
+            function me() {
+                FB.api('/me/friends', { fields: 'id, name, picture' }, function(response) {
+                    if (response.error) {
+                        alert(JSON.stringify(response.error));
+                    } else {
+                        var data = document.getElementById("data");
+                        fdata = response.data;
+                        console.log("fdata: " + fdata);
+
+                        response.data.forEach(function(item) {
+                            var d = document.createElement('div');
+                            d.innerHTML = "<img src="+item.picture+"/>"+item.name;
+                            data.appendChild(d);
+                        });
+                    }
+                    var friends = response.data;
+                    console.log(friends.length);
+                    for (var k = 0; k < friends.length && k < 200; k++) {
+                        var friend = friends[k];
+                        var index = 1;
+
+                        friendIDs[k] = friend.id;
+                        //friendsInfo[k] = friend;
+                    }
+                    console.log("friendId's: "+friendIDs);
+                });
+            }
+            
+            function logout() {
+                FB.logout(function(response) {
+                    alert('logged out');
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                });
+            }
+            
+            function login() {
+                FB.login(function(response) {
+                    if (response.session) {
+                        alert('logged in');
+                    } else {
+                        alert('not logged in');
+                    }
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                }, { scope: "email" });
+            }
+
+
+            function facebookWallPost() {
+                console.log('Debug 1');
+                var params = {
+                    method: 'feed',
+                    name: 'Facebook Dialogs',
+                    link: 'https://developers.facebook.com/docs/reference/dialogs/',
+                    picture: 'http://fbrell.com/f8.jpg',
+                    caption: 'Reference Documentation',
+                    description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+                };
+                console.log(params);
+                FB.ui(params, function(obj) {
+                    console.log(obj);
+                });
+            }
+      
+            function publishStoryFriend() {
+                randNum = Math.floor ( Math.random() * friendIDs.length );
+                
+                var friendID = friendIDs[randNum];
+                if (friendID == undefined){
+                    alert('please click the me button to get a list of friends first');
+                } else {
+                    console.log("friend id: " + friendID );
+                    console.log('Opening a dialog for friendID: ', friendID);
+                    var params = {
+                        method: 'feed',
+                        to: friendID.toString(),
+                        name: 'Facebook Dialogs',
+                        link: 'https://developers.facebook.com/docs/reference/dialogs/',
+                        picture: 'http://fbrell.com/f8.jpg',
+                        caption: 'Reference Documentation',
+                        description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+                    };
+                    FB.ui(params, function(obj) {
+                        console.log(obj);
+                    });
+                }
+            }
+            
+            document.addEventListener('deviceready', function() {
+                try {
+                    alert('Device is ready! Make sure you set your app_id below this alert.');
+                    FB.init({
+                        appId: '292844627531305',
+                        nativeInterface: CDV.FB,
+                        useCachedDialogs: false
+                    });
+                    document.getElementById('data').innerHTML = "";
+                } catch (e) {
+                    alert(e);
+                }
+            }, false);
+        </script>
+
+        <script>
+			$(document).on("pageinit", "body", function() {
+
+				$(document).on("swiperight click", ".nav-trigger", function(e) {
+
+					var pageLoadID, pageNavID, pageNav;
+
+					e.preventDefault();
+
+					//-- If this is a navigation panel, we need to inject it into our current page.
+					if ($(this).hasClass("nav-trigger")) {
+
+						pageLoadID  = $(this).attr("id");
+						pageLoadID  = pageLoadID.replace("-nav-trigger", "");
+						pageNavID   = pageLoadID + "-navigation";
+						pageNav     = nav.replace("\<js::replace{nav_id}/>", pageNavID);
+
+						$("#" + pageLoadID).prepend(pageNav);
+						$("#" + pageNavID).panel().enhanceWithin().panel("open");
+
+					}
+
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

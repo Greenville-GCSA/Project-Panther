@@ -5,13 +5,11 @@ $compileObj = new CompileHTML();
 $compileObj->set_html('		<div data-role="panel" id="<js::replace{nav_id}/>">
 			<ul data-role="listview" data-theme="d" data-icon="false">
 				<li data-role="list-divider" id="inline-profile">
-					<div id="user-avatar">
-						<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" />
-					</div>
+					<div id="user-avatar"></div>
 					<div id="user-name">
-						<span class="student-name">Matthew P. Kerle</span>
+						<span class="student-name"></span>
 						<br />
-						<span class="student-id">201202055</span>
+						<span class="student-id"></span>
 					</div>
 					<br class="clear" />
 				</li>
