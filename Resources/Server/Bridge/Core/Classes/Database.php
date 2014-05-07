@@ -8,7 +8,7 @@ class Core_Classes_Database extends PDO {
 	private $errorCallbackFunction;
 	private $errorMsgFormat;
 
-	public function __construct($dsn, $user="", $passwd="") {
+	public function __construct($dsn, $user = "", $passwd = "") {
 		$options = array(
 			PDO::ATTR_PERSISTENT => true, 
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION

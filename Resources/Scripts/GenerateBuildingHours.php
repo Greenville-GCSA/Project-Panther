@@ -12,6 +12,7 @@
  */
 $building_hours = array(
 	'it_department' => array(
+		'name' => 'IT Department',
 		'hours' => array(
 			'sunday' => array(
 				'open' => '9:30',
@@ -47,6 +48,7 @@ $building_hours = array(
 		'website' => 'http://it.greenville.edu',
 	),
 	'library' => array(
+		'name' => 'Library',
 		'hours' => array(
 			'sunday' => array(
 				'open' => '9:30',
@@ -82,6 +84,7 @@ $building_hours = array(
 		'website' => 'http://library.greenville.edu',
 	),
 	'annex' => array(
+		'name' => 'Annex',
 		'hours' => array(
 			'sunday' => array(
 				'open' => '9:30',

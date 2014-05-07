@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html xmlns:fb="http://ogp.me/ns/fb#">
+
+	<head>
+
+		<title>GCSA</title>
+
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<link href="../../GCSA/www/css/index.css" rel="stylesheet" type="text/css" />
+		<link href="../../GCSA/www/css/jquery.mobile-1.4.1.min.css" rel="stylesheet" />
+		<link href="../../GCSA/www/css/ProjectPanther2.0.min.css" rel="stylesheet" />
+
+		<script src="../../GCSA/www/javascript/jquery-2.1.0.min.js"></script>
+		<script src="../../GCSA/www/javascript/jquery.mobile-1.4.1.min.js"></script>
+
+		<style>
+
+			/* Page Elements */
+			body { background: rgb(255, 149, 27); }
+		    h1 { font-weight: bold; }
+
+			/* Navigation Stuff */
+			ul.ui-listview { text-transform: none; }
+			.ui-panel-display-reveal { box-shadow: none !important; }
+			.sidebar-icon { float: left; width: 16px; margin: 2px 8px; }
+
+			/* Mini Profiles on Navigation */
+			#inline-profile { background: #ff951b; color: #fff; text-shadow: 1px 1px 1px #444; border-top: 1px solid #8c510e; max-height: 55px; padding-top: 20px; }
+			#user-avatar { float: left; width: 50px; margin-right: 6px; }
+			#user-avatar > img { max-width: 50px; max-height: 50px; }
+			#user-name { font-size: medium; text-transform: none; margin-top: 5px; }
+
+            #login_button { display: block; background: url('../../GCSA/www/images/core/facebook-login-button.png') no-repeat; background-size: 75%; margin-left: auto; margin-right: auto; cursor: pointer; width: 360px; height: 172.5px; }
+            #confirmGCStudent-popup { width: 90% !important; left: 5% !important; }
+            .confirmation_form { display: none; }
+            #student_id { text-align: center; }
+
+            .header-no-border { border-top: none !important; }
+            .top-filler { background: #ff951b; height: 22px; }
+
+			/* Various Useful Classes */
+			.floatleft { float: left; }
+			.floatright { float: right; }
+			.clear { clear: both; }
+			.hidden { display: none; }
+
+		</style>
+
+		<!-- The Loading Prototype -->
+		<script>
+
+            //-- IO Buffer for every dynamic page...
+            $(document).bind('mobileinit', function() {
+                $(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+            });
+            /* This is solely for testing in-browser */
+            $(document).ready(function() {
+                $(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+            });
+
+		</script>
+
+		<script>
+
+			$(document).on("pageinit", "body", function() {
+			
+			});
+
+		</script>
+
+		<script>
+			var nav;
+			nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/t1/c0.12.320.320/p320x320/1560633_10201325361596512_1572126267_n.jpg" alt="" /></div><div id="user-name"><span class="student-name">Matthew P. Kerle</span><br /><span class="student-id">201202055</span></div><br class="clear" /></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building-hours"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-at.png" alt="" class="sidebar-icon" />Social</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#">        <span class="floatleft nav-text">            <img src="../../GCSA/www/images/sidebar-icons/icon-user.png" alt="" class="sidebar-icon" />Your Profile        </span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777"><span class="floatleft nav-text"><img src="../../GCSA/www/images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+        </script>
+
+	</head>
+
+	<body>
+
+        <div id="fb-root"></div>
+
+        <!-- facebook js sdk -->
+        <script src="../../GCSA/www/javascript/fbc/facebook-js-sdk.js"></script>
+
+        <script>
+
+            //-- Some variable definitions.
+            var friendIDs = [], fdata;
+            var you;
+            
+            // Specify the extended permissions needed to view user data
+            // The user will be asked to grant these permissions to the app (so only pick those that are needed)
+            var permissions = [
+              'email',
+              'user_likes',
+              'friends_likes',
+              'user_about_me',
+              'friends_about_me',
+              'user_birthday',
+              'friends_birthday',
+              'user_education_history',
+              'friends_education_history',
+              'user_hometown',
+              'friends_hometown',
+              'user_relationships',
+              'friends_relationships',
+              'user_relationship_details',
+              'friends_relationship_details',
+              'user_location',
+              'friends_location',
+              'user_religion_politics',
+              'friends_religion_politics',
+              'user_website',
+              'friends_website',
+              'user_work_history',
+              'friends_work_history'
+            ].join(',');
+    
+            // Specify the user fields to query the OpenGraph for.
+            // Some values are dependent on the user granting certain permissions
+            var fields = [
+                'id',
+                'name',
+                'first_name',
+                'last_name',
+                'link',
+                'username',
+                'gender',
+                'locale',
+                'age_range'
+            ].join(',');
+
+            FB.Event.subscribe('auth.login', function(response) {
+            });
+            
+            FB.Event.subscribe('auth.logout', function(response) {
+                //alert('auth.logout event');
+            });
+            
+            FB.Event.subscribe('auth.sessionChange', function(response) {
+                //alert('auth.sessionChange event');
+            });
+            
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                //alert('auth.statusChange event');
+            });
+
+            function getLoginStatus() {
+                FB.getLoginStatus(function(response) {
+                    if (response.status == 'connected') {
+                        you.fb.userId = response.authResponse.userID;
+                        document.getElementById('dev_console').innerHTML = "<br /><br />" + JSON.stringify(response);
+                    } else {
+                        alert('not logged in' + " - " + response.status);
+                    }
+                });
+            }
+
+            function me() {
+                FB.api('/me/friends', { fields: 'id, name, picture' }, function(response) {
+                    if (response.error) {
+                        alert(JSON.stringify(response.error));
+                    } else {
+                        var data = document.getElementById("data");
+                        fdata = response.data;
+                        console.log("fdata: " + fdata);
+
+                        response.data.forEach(function(item) {
+                            var d = document.createElement('div');
+                            d.innerHTML = "<img src="+item.picture+"/>"+item.name;
+                            data.appendChild(d);
+                        });
+                    }
+                    var friends = response.data;
+                    console.log(friends.length);
+                    for (var k = 0; k < friends.length && k < 200; k++) {
+                        var friend = friends[k];
+                        var index = 1;
+
+                        friendIDs[k] = friend.id;
+                        //friendsInfo[k] = friend;
+                    }
+                    console.log("friendId's: "+friendIDs);
+                });
+            }
+
+            function my_profile() {
+                FB.api('/me', {fields: fields}, function(response) {
+                    if (response.error) {
+                        alert(JSON.stringify(response.error));
+                    } else {
+                        alert(response);
+                        /*response.forEach(value, index, array) {
+                            $("#data").append(value);
+                        }*/
+                        //$("#data").html("Logged in");
+                    }
+                });
+            }
+            
+            function logout() {
+                FB.logout(function(response) {
+                    alert('logged out');
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                });
+            }
+            
+            function login() {
+                FB.login(function(response) {
+                    if (response.status == "connected") {
+                        console.log(response);
+                    } else {
+                        alert('not logged in' + " - " + response.session);
+                    }
+                    document.getElementById('data').innerHTML = JSON.stringify(response);
+                }, { scope: 'basic_info'});
+            }
+
+
+            function facebookWallPost() {
+                console.log('Debug 1');
+                var params = {
+                    method: 'feed',
+                    name: 'Facebook Dialogs',
+                    link: 'https://developers.facebook.com/docs/reference/dialogs/',
+                    picture: 'http://fbrell.com/f8.jpg',
+                    caption: 'Reference Documentation',
+                    description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+                };
+                console.log(params);
+                FB.ui(params, function(obj) {
+                    console.log(obj);
+                });
+            }
+      
+            function publishStoryFriend() {
+                randNum = Math.floor ( Math.random() * friendIDs.length );
+                
+                var friendID = friendIDs[randNum];
+                if (friendID == undefined){
+                    alert('please click the me button to get a list of friends first');
+                } else {
+                    console.log("friend id: " + friendID );
+                    console.log('Opening a dialog for friendID: ', friendID);
+                    var params = {
+                        method: 'feed',
+                        to: friendID.toString(),
+                        name: 'Facebook Dialogs',
+                        link: 'https://developers.facebook.com/docs/reference/dialogs/',
+                        picture: 'http://fbrell.com/f8.jpg',
+                        caption: 'Reference Documentation',
+                        description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+                    };
+                    FB.ui(params, function(obj) {
+                        console.log(obj);
+                    });
+                }
+            }
+            
+            $(document).ready(function() {
+                try {
+                    FB.init({
+                        appId: '292844627531305',
+                        useCachedDialogs: false,
+                        status     : true,
+                        cookie     : true,
+                        xfbml      : false
+                    });
+                    document.getElementById('data').innerHTML = "";
+                } catch (e) {
+                    alert(e);
+                }
+            }, false);
+        </script>
+
+		<div id="pages-container">
+
+            <!-- Login / Register -->
+            <div data-role="page" id="login_register" class="dynamic-page">
+
+				<!-- Header -->
+				<div data-role="header" id="login_register-header" class="header-no-border">
+					<h1>Login</h1>
+				</div>
+
+				<!-- Page Content -->
+				<div data-role="main" id="login_register-content" class="ui-content">
+
+                    <a href="#" onclick="my_profile()">My Profile()</a>
+
+				    <a href="#confirmGCStudent" data-rel="popup" id="login_button"></a>
+
+                    <div id="data">loading ...</div>
+
+                    <div id="dev_console"></div>
+
+				</div>
+
+				<!-- Footer -->
+				<div data-role="footer" id="login_register-footer">
+					<p>Events Footer</p>
+				</div>
+
+            </div>
+
+		</div>
+
+        <script>
+            $("#login_button").on("click", function(event) {
+                login();
+            });
+		</script>
+
+	</body>
+</html>

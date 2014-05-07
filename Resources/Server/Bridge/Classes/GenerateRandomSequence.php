@@ -1,6 +1,8 @@
 <?php
 
-class GenerateRandomSequence {
+include_once '../Core/autoload.php';
+
+class Classes_GenerateRandomSequence {
 
 	public $sequence_length, $sequence_map, $sequence_string;
 	public $sequence_set;
@@ -14,7 +16,7 @@ class GenerateRandomSequence {
 
 		$this->lower_bounds    = 0;
 		$this->top_bounds      = 9;
-		$this->repeat_ints  = isset($options[1]) ? $options[1] : (isset($options['repeat_ints']) ? $options['repeat_ints'] : true);
+		$this->repeat_ints     = isset($options[1]) ? $options[1] : (isset($options['repeat_ints']) ? $options['repeat_ints'] : true);
 	}
 
 	/* The length of the sequence (4 by default) */

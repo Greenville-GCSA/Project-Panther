@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html xmlns:fb="http://ogp.me/ns/fb#">
+
+<head>
+
+	<title>GCSA</title>
+
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, target-densitydpi=device-dpi" />
+
+	<link href="css/index.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.mobile-1.4.1.min.css" rel="stylesheet" />
+	<link href="css/ProjectPanther2.0.min.css" rel="stylesheet" />
+
+	<script src="javascript/jquery-2.1.0.min.js"></script>
+	<script src="javascript/jquery.mobile-1.4.1.min.js"></script>
+
+	<style>
+
+		/* Page Elements */
+		body { background: rgb(255, 149, 27); }
+		h1 { font-weight: bold; }
+
+		/* Navigation Stuff */
+		ul.ui-listview { text-transform: none; }
+		.ui-panel-display-reveal { box-shadow: none !important; }
+		.sidebar-icon { float: left; width: 16px; margin: 2px 8px; }
+
+		/* Mini Profiles on Navigation */
+		#inline-profile { background: #ff951b; color: #fff; text-shadow: 1px 1px 1px #444; border-top: 1px solid #8c510e; max-height: 55px; padding-top: 20px; }
+		#user-avatar { float: left; width: 50px; margin-right: 6px; }
+		#user-avatar > img { max-width: 50px; max-height: 50px; }
+		#user-name { font-size: medium; text-transform: none; margin-top: 5px; }
+
+		#login_register-content { width: 100%; text-align: center; }
+		#login_button { display: block; background: url('images/core/facebook-login-button.png') no-repeat; width: 226px; height: 47px; margin-left: auto; margin-right: auto; }
+		#confirmGCStudent-popup { width: 90% !important; left: 5% !important; }
+		#student_id, #confirmation_code { text-align: center; }
+		.reg-step { display: none; width: 100%; padding: 10px; text-align: center; }
+		.reg-step p { text-transform: none; }
+		.reg-step input[type=text], .reg-step input[type=tel] { width: 80%; }
+
+		.header-no-border { border-top: none !important; }
+		.top-filler { background: #ff951b; height: 22px; }
+
+		/* Various Useful Classes */
+		.floatleft { float: left; }
+		.floatright { float: right; }
+		.clear { clear: both; }
+		.hidden { display: none; }
+
+		/* Dev Stuff */
+		#data { text-transform: none !important; }
+
+	</style>
+
+	<!-- The Loading Prototype -->
+	<script>
+
+		//-- IO Buffer for every dynamic page...
+		$(document).bind('mobileinit', function() {
+			$.mobile.defaultPageTransition = "flip";
+			$.mobile.touchOverflowEnabled = true;
+			$(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+		});
+		/* This is solely for testing in-browser */
+		$(document).ready(function() {
+			$(".dynamic-page").prepend("<div class=\"top-filler\">&nbsp;</div>");
+		});
+
+	</script>
+
+</head>
+
+<body>
+
+<div id="fb-root"></div>
+
+<!-- cordova -->
+<script src="cordova.js"></script>
+<!-- cordova facebook plugin -->
+<script src="javascript/fbc/cdv-plugin-fb-connect.js"></script>
+<!-- facebook js sdk -->
+<script src="javascript/fbc/facebook-js-sdk.js"></script>
+
+<script>
+
+	document.addEventListener('deviceready', function() {
+		try {
+			FB.init({
+				appId: '292844627531305',
+				nativeInterface: CDV.FB,
+				useCachedDialogs: false,
+				status     : true,
+				cookie     : true,
+				xfbml      : false
+			});
+		} catch (e) {
+			alert(e);
+		}
+	}, false);
+
+	// Specify the user fields to query the OpenGraph for.
+	var fields = [
+		'id',
+		'name',
+		'first_name',
+		'last_name',
+		'link',
+		'username',
+		'gender',
+		'locale',
+		'age_range'
+	].join(',');
+
+	FB.Event.subscribe('auth.sessionChange', function(response) {
+	});
+
+	FB.Event.subscribe('auth.statusChange', function(response) {
+	});
+
+	var facebookAccessToken = '';
+	FB.Event.subscribe('auth.login', function(response) {
+		if (response.status == "connected") {
+			facebookAccessToken = response.authResponse.accessToken;
+		}
+	});
+
+	function login() {
+		FB.login(function(response) {
+		}, { scope: 'basic_info'});
+	}
+
+	function facebook_user_profile(accessToken, callbackFunc) {
+		FB.api('/me', {fields: fields, access_token: accessToken}, function(response) {
+			if (!response.error) {
+				callbackFunc(response);
+			}
+		});
+	}
+
+	function logout() {
+		FB.logout(function(response) {
+			alert("Logged Out of Facebook!");
+		});
+	}
+
+	FB.Event.subscribe('auth.logout', function(response) {
+	});
+
+</script>
+
+<div id="pages-container">
+
+	<!-- Login / Register -->
+	<div data-role="page" id="login_register" class="dynamic-page">
+
+		<!-- Header -->
+		<div data-role="header" id="login_register-header" class="header-no-border">
+			<h1>Login</h1>
+		</div>
+
+		<!-- Page Content -->
+		<div data-role="main" id="login_register-content" class="ui-content">
+			<a href="#" id="login_button"></a>
+			<!-- data-dismissible="false" -->
+			<div data-role="popup" id="confirmGCStudent" data-dismissible="false" style="text-align: center; width: 90% !important; left: 5% !important;">
+				<div style="margin-left: auto; margin-right: auto;">
+					<div data-role="header">
+						<h4>GC Profile</h4>
+					</div>
+					<div data-role="main" class="ui-content">
+                                <span id="step_one" class="reg-step">
+                                    <h4>Who are you?</h4>
+                                    <div>
+										<input type="radio" name="member_type" id="type_student" value="1" /> <label for="type_student">Student</label>
+										<input type="radio" name="member_type" id="type_faculty-staff" value="2" /> <label for="type_faculty-staff">Faculty  / Staff</label>
+									</div>
+                                </span>
+                                <span id="step_two" class="reg-step">
+									<div id="confirm_student_form" class="confirmation_form">
+										<p class="student_login_element">Enter your Student ID below to confirm your identity.</p>
+										<label for="student_id"><strong>Student ID:</strong></label> <input type="tel" id="student_id" />
+									</div>
+									<div id="confirm_facstaff_form" class="confirmation_form">
+										<label for="faculty_staff_first_name"><strong>First Name:</strong></label> <input type="text" id="faculty_staff_first_name" name="faculty_staff_first_name" />
+										<label for="faculty_staff_last_name"><strong>Last Name:</strong></label> <input type="text" id="faculty_staff_last_name" name="faculty_staff_last_name" />
+									</div>
+                                    <span id="confirm_form_lower" class="hidden">
+                                        <input type="submit" value="Register" id="register_button" />
+                                    </span>
+                                </span>
+                                <span id="step_three" class="reg-step">
+                                    <p>A confirmation email was sent to <span id="email_slot"></span>.<br />Enter the confirmation code below and complete your registration.</p>
+                                    <label for="confirmation_code"><strong>Confirmation Code:</strong> <input type="tel" id="confirmation_code" />
+										<input type="submit" value="Complete Registration" id="complete_registration_button" />
+                                </span>
+					</div>
+				</div>
+			</div>
+			<div id="data"></div>
+		</div>
+
+	</div>
+
+	<!-- PantherPoints -->
+	<div data-role="page" id="panther_points" class="dynamic-page">
+
+		<!-- Header -->
+		<div data-role="header" id="panther_points-header" class="header-no-border">
+			<a href="#" class="nav-trigger" id="panther_points-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+			<h1>PantherPoints</h1>
+		</div>
+
+		<!-- Page Content -->
+		<div data-role="main" id="panther_points-content" class="ui-content">
+			<button class="scan-qr">Scan Event QR Code</button>
+		</div>
+
+	</div>
+
+	<!-- Chapel Counter -->
+	<div data-role="page" id="chapel_counter" class="dynamic-page">
+
+		<div data-role="header" id="chapel_counter-header" class="header-no-border">
+			<a href="#" class="nav-trigger" id="chapel_counter-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+			<h1>Chapel Counter</h1>
+		</div>
+
+		<div data-role="main" id="chapel_counter-content" class="ui-content">
+			<div><strong>Primary Credits:</strong></div>
+			<div class="floatleft" style="width: 45px;">
+				<input type="number" value="0" id="user_credits-primary" name="user_credits-primary" readonly="readonly" style="text-align: center; padding: 10px; font-size: 12pt;">
+			</div>
+			<button id="add_credits-primary" class="floatleft" style="width: 45px; margin-left: 5px;">+</button>
+			<button id="remove_credits-primary" class="floatleft" style="width: 45px; margin-left: 5px;">-</button>
+			<br class="clear">
+			<div><strong>Elective Credits:</strong></div>
+			<div class="floatleft" style="width: 45px;">
+				<input type="number" value="0" id="user_credits-elective" name="user_credits-elective" readonly="readonly" style="text-align: center; padding: 10px; font-size: 12pt;">
+			</div>
+			<button id="add_credits-elective" class="floatleft" style="width: 45px; margin-left: 5px;">+</button>
+			<button id="remove_credits-elective" class="floatleft" style="width: 45px; margin-left: 5px;">-</button>
+			<br class="clear">
+			<strong>Total Credits:</strong> <span id="user_credits-total">0</span> of 32
+			<br>
+			<strong>Remaining Credits Needed:</strong> <span id="user_credits-remaining">32</span>
+		</div>
+
+	</div>
+
+	<!-- Building Hours -->
+	<div data-role="page" id="building_hours" class="dynamic-page">
+
+		<div data-role="header" id="building_hours-header" class="header-no-border">
+			<a href="#" class="nav-trigger" id="building_hours-nav-trigger" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Bars</a>
+			<h1>Building Hours</h1>
+		</div>
+
+		<div data-role="main" id="building_hours-content" class="ui-content">
+			<!-- Page Content -->
+		</div>
+
+	</div>
+
+</div>
+
+<script>
+
+$(document).on("pageinit", "body", function() {
+
+	$("#login_button").on("click", function(event) {
+		login();
+		facebook_user_profile(facebookAccessToken, function(user) {
+
+			if (facebookAccessToken != null) {
+				//-- See if the Facebook User has already started a GCSA account...
+				$.ajax({
+					url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserCheckExists.php',
+					type: 'post',
+					data: {
+						'facebook_user_id': user.id,
+						'facebook_user_arr': user,
+						'facebook_access_token': facebookAccessToken
+					},
+					dataType: 'json',
+					error: function(xhr) {
+						alert("uh oh - " + xhr.responseText);
+					},
+					success: function(response) {
+						if (response.is_existing == true && response.is_activated == true) {
+							successfullyLoggedIn(response);
+						} else if (response.is_existing == true && response.is_activated == false) {
+							// !!@TODO: The user exists, but hasn't yet activated their account. Activation dialog & resend button
+							$(this).hide();
+							$(".reg-step").hide();
+							$("#step_three").show();
+							$("#email_slot").html(response.profile.email);
+							$("#confirmGCStudent").popup("open");
+							checkCompleteRegistration(response);
+						} else {
+							$(this).hide();
+							$("#step_one").show();
+							$("#confirmGCStudent").popup("open");
+							$("input[name=member_type]").change(function(event) {
+								var selectedValue = $(this).val();
+								if (selectedValue == 1 || selectedValue == 2) {
+									$(".confirmation_form").slideUp("slow");
+									if (selectedValue == 1) {
+										$("#confirm_student_form").slideDown("slow");
+									} else if (selectedValue == 2) {
+										$("#confirm_facstaff_form").slideDown("slow");
+									}
+									$("#step_two").slideDown("slow", function() {
+										$("#confirm_form_lower").slideDown("slow");
+									});
+								}
+							});
+							$("#register_button").on("click", function(e) {
+								e.preventDefault();
+								$.ajax({
+									url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserAdd.php',
+									type: 'post',
+									data: {
+										'new_user': true,
+										'facebook_user_id': response.fb_user.id,
+										'facebook_access_token': response.fb_access_token,
+										'member_type': $("input[name=member_type]").val(),
+										'student_id': $("#student_id").val(),
+										'first_name': response.fb_user.first_name,
+										'last_name': response.fb_user.last_name,
+										'faculty_staff_first_name': $("#faculty_staff_first_name").val(),
+										'faculty_staff_last_name': $("#faculty_staff_last_name").val(),
+										'facebook_user_arr': response.fb_user
+									},
+									dataType: 'json',
+									error: function(xhr) {
+										alert("hmm... " + xhr.responseText);
+									},
+									success: function(response) {
+										if (response.success == "user_added") {
+											$.ajax({
+												url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/SendConfirmationEmail.php',
+												type: 'post',
+												data: {
+													'facebook_user_id': response.fb_user.id,
+													'facebook_user_arr': response.fb_user
+												},
+												dataType: 'json',
+												error: function(xhr) {
+													alert("You're on the naughty list. Here's some coal - " + xhr.responseText);
+												},
+												success: function(response) {
+													if (response.status == 'email_sent') {
+														$("#email_slot").html(response.profile.email);
+														$(".reg-step").slideUp("slow");
+														$("#step_three").slideDown("slow");
+														checkCompleteRegistration(response);
+													}
+												}
+											});
+										}
+									}
+								});
+							});
+						}
+					}
+				});
+			} else {
+				alert("Failed to login, try again!");
+			}
+		});
+	});
+
+	/*$("#logout_button").on("click", function(event) {
+	 logout();
+	 $(this).hide();
+	 $("#login_button").show();
+	 });*/
+
+});
+
+function successfullyLoggedIn(response) {
+
+	var nav = '<div data-role="panel" id="<js::replace{nav_id}/>"><ul data-role="listview" data-theme="d" data-icon="false"><li data-role="list-divider" id="inline-profile"><div id="user-avatar"><img src="https://graph.facebook.com/<js::replace{user_id}/>/picture" alt="" class="avatar" /></div><div id="user-name"><span class="student-name"><js::replace{user_name}/></span><br /><span class="student-id"><js::replace{student_id}/></span></div><br class="clear" /></li><li class="nav-item"><a href="#panther_points" id="nav_panther_points" class="nav-link"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-rouble.png" alt="" class="sidebar-icon" />PantherPoints</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#gpa_calculator" id="nav_gpa_calculator" class="nav-link"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-calculator.png" alt="" class="sidebar-icon" />GPA Calculator</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#chapel_counter" id="nav_chapel_counter" class="nav-link"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-abacus.png" alt="" class="sidebar-icon" />Chapel Counter<span id="cc_bubble" class="ui-li-count"><js::replace{cc_bubble}/></span></span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="#building_hours" id="nav_building_hours" class="nav-link"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-time.png" alt="" class="sidebar-icon" />Building Hours</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li><li class="nav-item"><a href="tel:16186647777" id="nav_call_security" class="nav-link"><span class="floatleft nav-text"><img src="images/sidebar-icons/icon-phone-call.png" alt="" class="sidebar-icon"/>Call Security</span><span class="ui-icon-carat-r ui-btn-icon-right"></span></a></li></ul></div>';
+	$.mobile.changePage("#panther_points");
+	$(document).on("swiperight click", ".nav-trigger", function(e) {
+
+		var pageLoadID, pageNavID, pageNav;
+
+		e.preventDefault();
+
+		//-- If this is a navigation panel, we need to inject it into our current page.
+		if ($(this).hasClass("nav-trigger")) {
+
+			pageLoadID  = $(this).attr("id");
+			pageLoadID  = pageLoadID.replace("-nav-trigger", "");
+			pageNavID   = pageLoadID + "-navigation";
+			pageNav     = nav.replace("\<js::replace{nav_id}/>", pageNavID);
+			//pageNav     = pageNav.replace("\<js::replace{user_avatar}/>", "<img src=\"https://graph.facebook.com/" + response.fb_user.id + "/picture\" alt=\"\" id=\"avatar\" />");
+			pageNav     = pageNav.replace("\<js::replace{user_id}/>", response.fb_user.id);
+			pageNav     = pageNav.replace("\<js::replace{user_name}/>", response.fb_user.first_name + " " + response.fb_user.last_name);
+			pageNav     = pageNav.replace("\<js::replace{cc_bubble}/>", response.profile.credits_remaining);
+			if (response.profile.greenville_student_id != "") {
+				pageNav = pageNav.replace("\<js::replace{student_id}/>", response.profile.greenville_student_id);
+			} else {
+				//-- They are faculty / staff then
+				// !!@TODO: Offset the top-margin of the full name since there won't be anything under it.
+			}
+
+			$("#" + pageLoadID).prepend(pageNav);
+			$("#" + pageNavID).panel().enhanceWithin(); //$("#" + pageNavID).panel().enhanceWithin().panel("open"); /* Remove .panel("open") and uncomment lines below to hide dots for badges */
+			/*
+			 <span id="cc_bubble" class="ui-li-count"><js::replace{cc_bubble}/></span>
+			 */
+			//-- Remove the ugly dots on any navs with badges BEFORE the nav is *actually* opened.
+			$("li.ui-li-has-count").removeClass("ui-li-has-count");
+			$("#" + pageNavID).panel("open");
+
+		}
+
+	});
+
+	//-- A nav item was clicked...
+	$(document).on("click", ".nav-link", function(e) {
+		var pageId = $(this).attr("id");
+		pageId = pageId.replace("nav_", "");
+
+		switch (pageId) {
+			case "chapel_counter":
+				response = chapel_counter(response);
+				break;
+			case "building_hours":
+				response = building_hours(response);
+				break;
+		}
+	});
+
+	function chapel_counter(response) {
+		$("#user_credits-primary").val(response.profile.credits_primary);
+		$("#user_credits-elective").val(response.profile.credits_elective);
+		$("#user_credits-total").text(response.profile.credits_total);
+		$("#user_credits-remaining").text(response.profile.credits_remaining);
+
+		$("#add_credits-primary, #remove_credits-primary").click(function(e) {
+			e.preventDefault();
+			var userCreditsPrimary = parseInt($("#user_credits-primary").val());
+			if ($(this).attr("id") == "add_credits-primary") {
+				userCreditsPrimary += 1;
+			} else {
+				if (userCreditsPrimary > 0) {
+					userCreditsPrimary -= 1;
+				}
+			}
+			$("#user_credits-primary").val(userCreditsPrimary);
+			response = cc_update_total(response);
+			cc_update_remaining();
+		});
+
+		$("#add_credits-elective, #remove_credits-elective").click(function(e) {
+			e.preventDefault();
+			var userCreditsElective = parseInt($("#user_credits-elective").val());
+			if ($(this).attr("id") == "add_credits-elective" && userCreditsElective < 6) {
+				userCreditsElective += 1;
+			} else if ($(this).attr("id") == "remove_credits-elective") {
+				if (userCreditsElective > 0) {
+					userCreditsElective -= 1;
+				}
+			}
+			$("#user_credits-elective").val(userCreditsElective);
+			response = cc_update_total(response);
+			cc_update_remaining();
+		});
+
+		return response;
+	}
+
+	function building_hours(response) {
+
+		$.getJSON("http://www.labradoodle-360.com/GCSA/Bridge/Data-Streams/BuildingHours/HoursOfOperation.json", function(data) {
+			var items = [];
+			$.each(data, function(key, val) {
+				items.push( "<li id=\'" + key + "\'>" + val.name + "</li>");
+			});
+			$("<ul/>", {
+				"class": "my-new-list",
+				html: items.join("")
+			}).appendTo("#building_hours-content");
+		});
+
+	}
+
+	function cc_update_total(response) {
+		var primaryValue, electiveValue, newTotal;
+		primaryValue  = parseInt($("#user_credits-primary").val());
+		electiveValue = parseInt($("#user_credits-elective").val());
+		newTotal = primaryValue + electiveValue;
+		response = cc_update_database(response, primaryValue, electiveValue, newTotal);
+		$("#user_credits-total").text(newTotal);
+		return response;
+	}
+
+	function cc_update_remaining() {
+		var creditsRequired, primaryValue;
+		var electiveValue, combinedValue, newRemaining;
+		creditsRequired = 32;
+		primaryValue  = parseInt($("#user_credits-primary").val());
+		electiveValue = parseInt($("#user_credits-elective").val());
+		combinedValue = primaryValue + electiveValue;
+		newRemaining = creditsRequired - combinedValue;
+		$("#user_credits-remaining").text(newRemaining);
+	}
+
+	function cc_update_database(response, newPrimaryTotal, newElectiveTotal, newCreditsTotal) {
+		$.ajax({
+			url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserUpdateChapelCredits.php',
+			type: 'post',
+			data: {
+				'user_id': response.profile.id,
+				'credits_primary': newPrimaryTotal,
+				'credits_elective': newElectiveTotal,
+				'credits_total': newCreditsTotal,
+				'no_row': response.profile.no_row
+			},
+			dataType: 'json',
+			error: function(xhr) {
+				alert("hmm... " + xhr.responseText);
+			},
+			success: function() {
+				/* It worked...! */
+			}
+		});
+		response = cc_update_local(response, newPrimaryTotal, newElectiveTotal, newCreditsTotal);
+		return response;
+	}
+
+	function cc_update_local(response, newPrimaryTotal, newElectiveTotal, newCreditsTotal) {
+		response.profile.no_row            = response.profile.id;
+		response.profile.credits_primary   = newPrimaryTotal;
+		response.profile.credits_elective  = newElectiveTotal;
+		response.profile.credits_total     = newCreditsTotal;
+		response.profile.credits_remaining = 32 - newCreditsTotal;
+		$("#cc_bubble").text(newRemaining);
+		return response;
+	}
+
+	$(".scan-qr").on("click", function(e) {
+		//alert(device.uuid);
+		cordova.plugins.barcodeScanner.scan(
+				function (qr_code) {
+					var onSuccess = function(position) {
+						if (qr_code.format == "QR_CODE" && qr_code.cancelled == 0 && qr_code.result != "") {
+							alert(qr_code.text);
+							$.ajax({
+								url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/PantherPoints.php',
+								type: 'post',
+								data: {
+									'user_id': response.profile.id,
+									'pp_action': 'parse_event_qr',
+									'qr_code_content': qr_code.text,
+									'geo_cords_latitude': position.coords.latitude,
+									'geo_cords_longitude': position.coords.longitude
+								},
+								dataType: 'json',
+								error: function(xhr) {
+									alert("Error: " + xhr.responseText);
+								},
+								success: function(response) {
+									if (response.error == true) {
+										alert(response.reason);
+									} else {
+										alert("Success! Update the leaderboards.");
+									}
+								}
+							});
+						} else if (qr_code.cancelled != 0) {
+							alert("QR Code Scan Cancelled!");
+						} else if (qr_code.format != "QR_CODE") {
+							alert("Invalid QR Code Format. Please try again!");
+						}
+					};
+
+					function onError(error) {
+						alert("Unable to Process Geographic Position!");
+					}
+
+					navigator.geolocation.getCurrentPosition(onSuccess, onError);
+				},
+				function (error) {
+					alert("Scanning failed: " + error);
+				}
+		);
+	});
+
+	/*$("#scanner_one").on("click", function(e) {
+	 cordova.exec(success, failure, "ScanditSDK", "scan",
+	 ["0zmiTsKCEeOf4auLgo/pLEXNgPrITDOOdtaIm1A+53I",
+	 {"beep": true,
+	 "1DScanning" : true,
+	 "2DScanning" : true}]);
+	 });
+	 function success(resultArray) {
+
+	 alert("Scanned " + resultArray[0] + " code: " + resultArray[1]);
+
+	 // NOTE: Scandit SDK Phonegap Plugin Versions 1.* for iOS report
+	 // the scanning result as a concatenated string.
+	 // Starting with version 2.0.0, the Scandit SDK Phonegap
+	 // Plugin for iOS reports the result as an array
+	 // identical to the way the Scandit SDK plugin for Android reports results.
+
+	 // If you are running the Scandit SDK Phonegap Plugin Version 1.* for iOS,
+	 // use the following approach to generate a result array from the string result returned:
+	 // resultArray = result.split("|");
+	 }
+
+	 function failure(error) {
+	 alert("Failed: " + error);
+	 }*/
+
+}
+
+function checkCompleteRegistration(response) {
+	$("#complete_registration_button").on("click", function(e) {
+		e.preventDefault();
+		if ($("#confirmation_code").val() == response.profile.activation_code) {
+			$.ajax({
+				url: 'http://www.labradoodle-360.com/GCSA/Bridge/Actions/UserActivate.php',
+				type: 'post',
+				data: {
+					'facebook_user_id': response.fb_user.id,
+					'facebook_user_arr': response.fb_user
+				},
+				dataType: 'json',
+				error: function(xhr) {
+					alert("Wow. Really? You're stupid! - " + xhr.responseText);
+				},
+				success: function(response) {
+					successfullyLoggedIn(response);
+				}
+			});
+		} else {
+			alert("Invalid Confirmation Code. Try Again.");
+		}
+	});
+}
+
+</script>
+
+</body>
+
+</html>
